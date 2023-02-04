@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from loguru import logger
 
 from classifier import NewsCategoryClassifier
-import os
 
 
 class PredictRequest(BaseModel):
@@ -51,7 +50,7 @@ def shutdown_event():
     2. Any other cleanups
     """
     logger.info("Shutting down application")
-    os.remove(LOGS_OUTPUT_PATH)
+    open(LOGS_OUTPUT_PATH, 'w').close()
     del MODEL
     
 
