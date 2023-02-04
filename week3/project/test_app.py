@@ -23,7 +23,11 @@ def test_root():
     [TO BE IMPLEMENTED]
     Test the root ("/") endpoint, which just returns a {"Hello": "World"} json response
     """
-    pass
+    
+    response = client.get("/")
+    assert response.status_code == 200
+    assert response.json() == {"Hello": "World"}
+    
 
 
 def test_predict_empty():
@@ -31,7 +35,10 @@ def test_predict_empty():
     [TO BE IMPLEMENTED]
     Test the "/predict" endpoint, with an empty request body
     """
-    pass
+    with TestClient(app) as client:
+        response = client.post("/predict", json={})
+        assert response.status_code == 422
+    
 
 
 def test_predict_en_lang():
@@ -39,7 +46,15 @@ def test_predict_en_lang():
     [TO BE IMPLEMENTED]
     Test the "/predict" endpoint, with an input text in English (you can use one of the test cases provided in README.md)
     """
-    pass
+    with TestClient(app) as client:
+        response = client.post("/predict", json={
+            "source": "<value>",
+            "url": "<value>",
+            "title": "<value>",
+            "description": "hello"
+        })
+        assert response.status_code == 200
+    
 
 
 def test_predict_es_lang():
@@ -48,7 +63,15 @@ def test_predict_es_lang():
     Test the "/predict" endpoint, with an input text in Spanish. 
     Does the tokenizer and classifier handle this case correctly? Does it return an error?
     """
-    pass
+    with TestClient(app) as client:
+        response = client.post("/predict", json={
+            "source": "<value>",
+            "url": "<value>",
+            "title": "<value>",
+            "description": "hola"
+        })
+        assert response.status_code == 200
+    
 
 
 def test_predict_non_ascii():
@@ -57,4 +80,12 @@ def test_predict_non_ascii():
     Test the "/predict" endpoint, with an input text that has non-ASCII characters. 
     Does the tokenizer and classifier handle this case correctly? Does it return an error?
     """
-    pass
+    with TestClient(app) as client:
+        response = client.post("/predict", json={
+            "source": "<value>",
+            "url": "<value>",
+            "title": "<value>",
+            "description": "ع∞🚀Ω好今"
+        })
+        assert response.status_code == 200
+    

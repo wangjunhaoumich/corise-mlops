@@ -23,7 +23,6 @@ class PredictResponse(BaseModel):
 
 MODEL_PATH = "../data/news_classifier.joblib"
 LOGS_OUTPUT_PATH = "../data/logs.out"
-MODEL = None
 app = FastAPI()
 
 
@@ -55,8 +54,8 @@ def shutdown_event():
     """
     logger.info("Shutting down application")
     open(LOGS_OUTPUT_PATH, 'w').close()
-    del MODEL
-    
+    global MODEL
+    MODEL = None
 
 @app.post("/predict", response_model=PredictResponse)
 def predict(request: PredictRequest):
