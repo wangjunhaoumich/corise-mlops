@@ -3,6 +3,8 @@ from pydantic import BaseModel
 from loguru import logger
 
 from classifier import NewsCategoryClassifier
+from datetime import datetime
+import time
 
 
 class PredictRequest(BaseModel):
@@ -71,9 +73,17 @@ def predict(request: PredictRequest):
     }
     3. Construct an instance of `PredictResponse` and return
     """
+    start_time = time.time()
     scores = MODEL.predict_proba(request.dict())
     label = MODEL.predict_label(request.dict())
     response = PredictResponse(scores=scores, label=label)
+    end_time = time.time()
+    logger.info({
+        'timestamp': datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        'request': request.dict(), 
+        'prediction': response.dict(),
+        'latency':  end_time - start_time
+    })
     return response
 
 
