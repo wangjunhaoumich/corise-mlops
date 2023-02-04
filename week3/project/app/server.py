@@ -1,10 +1,12 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from loguru import logger
-
-from classifier import NewsCategoryClassifier
 from datetime import datetime
 import time
+import sys
+import os 
+sys.path.append(os.path.dirname(__file__))
+from classifier import NewsCategoryClassifier
 
 
 class PredictRequest(BaseModel):
